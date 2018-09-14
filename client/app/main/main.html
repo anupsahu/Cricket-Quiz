@@ -8,19 +8,24 @@
     </div>
 
     <form name="form" ng-submit="vm.submit(form)" novalidate>
-        <div class="form-group" ng-repeat="ques in vm.questions">
-            <label for="exampleSelect1"><h4> {{$index+1}} . {{ ques.question }} </h4></label>
+
+        <div class="form-group" ng-class="form.$submitted && !form.$error.required && form.question_{{$index}}.$touched && form.question_{{$index}}.$error.evaluate ? 'text-danger': ''" ng-repeat="ques in vm.questions">
+
+            <!-- Questions -->
+            <label for="question"><h4> {{$index+1}} . {{ ques.question }} </h4></label>
             <select class="form-control col-md-2 w-100 ml-3" ng-model="vm.answer[$index]" name="question_{{ $index }}" required evaluate ng-model-options="{ allowInvalid: true }">
               <option value="" disabled selected>Select an answer</option>
               <option ng-repeat="(key, value) in ques.option" ng-value="key"> {{ value }}</option>
             </select>
 
+            <!-- Required Validation -->
             <div ng-show="form.$submitted || form.question_{{$index}}.$touched">
                 <div class="text-danger" ng-show="form.question_{{$index}}.$error.required">Cant be left Blank</div>
             </div>
 
+            <!-- Correct Answer Validation -->
             <div ng-show="form.$submitted && !form.$error.required && form.question_{{$index}}.$touched">
-                <div class="text-danger" ng-show="form.question_{{$index}}.$error.evaluate">Wrong Answer</div>
+                <div class="text-danger" ng-show="form.question_{{$index}}.$error.evaluate">Wrong Answer. Right Answer is {{ ques.option[ques.answer]}}</div>
                 <div class="text-success" ng-hide="form.question_{{$index}}.$error.evaluate">Right Answer</div>
             </div>
         </div>
