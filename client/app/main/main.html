@@ -1,0 +1,48 @@
+<!-- Page Content -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h1 class="mt-5">LiftOff Quiz</h1>
+            <p class="lead">How Well do you know your Indian Cricket Team!</p>
+        </div>
+    </div>
+
+    <form name="form" ng-submit="vm.submit(form)" novalidate>
+        <div class="form-group" ng-repeat="ques in vm.questions">
+            <label for="exampleSelect1"><h4> {{$index+1}} . {{ ques.question }} </h4></label>
+            <select class="form-control col-md-2 w-100 ml-3" ng-model="vm.answer[$index]" name="question_{{ $index }}" required evaluate ng-model-options="{ allowInvalid: true }">
+              <option value="" disabled selected>Select an answer</option>
+              <option ng-repeat="(key, value) in ques.option" ng-value="key"> {{ value }}</option>
+            </select>
+
+            <div ng-show="form.$submitted || form.question_{{$index}}.$touched">
+                <div class="text-danger" ng-show="form.question_{{$index}}.$error.required">Cant be left Blank</div>
+            </div>
+
+            <div ng-show="form.$submitted && !form.$error.required && form.question_{{$index}}.$touched">
+                <div class="text-danger" ng-show="form.question_{{$index}}.$error.evaluate">Wrong Answer</div>
+                <div class="text-success" ng-hide="form.question_{{$index}}.$error.evaluate">Right Answer</div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-sm-1">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+            <div class="col-sm-1">
+                <a ng-click="vm.reset()"><button class="btn btn-light">Reset</button></a>
+            </div>
+        </div>
+    </form>
+    <div class="row" ng-show="vm.result">
+        <div class="col-lg-12 text-center">
+            <h1 class="mt-5">Results</h1>
+            <div class="d-flex justify-content-center">
+                <div class="col-md-6">
+                    <canvas id="pie" class="chart chart-pie" chart-data="data" chart-labels="labels" chart-options="options">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
